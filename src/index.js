@@ -1,12 +1,28 @@
+//React
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+//Redux
+import { Provider } from 'react-redux';
+import { store } from './store';
+//Router
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+//Components
+import App from './components/app';
+import ErrorBoundry from './components/error-boundry';
+import BooksStoreService from './services/bookStore-service';
+import { BookStoreServiceProvider } from './components/bookStore-service-context';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const booksStoreService = new BooksStoreService();
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+ReactDOM.render(
+	<Provider store={store}>
+		<ErrorBoundry>
+			<BookStoreServiceProvider value={booksStoreService}>
+				<Router>
+					<App />
+				</Router>
+			</BookStoreServiceProvider>
+		</ErrorBoundry>
+	</Provider>,
+	document.getElementById('root')
+);
